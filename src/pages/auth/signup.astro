@@ -8,10 +8,10 @@ import { validateEmail } from '../../lib/utils';
 
 const errors = { username: "", email: "", password: "", passwordConfirm: ""}
 
-
+let errorMessage: string | null = null;
 // check for form submissions
 if (Astro.request.method === "POST") {
-	let errorMessage: string | null = null;
+	
 
 	const formData = await Astro.request.formData();
 	const username = formData.get("username") as string;
