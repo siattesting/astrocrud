@@ -19,7 +19,7 @@ if (Astro.request.method === "POST") {
 	if (isValidEmail(email)) {
 		try {
 			const storedUser = await db.execute({
-				sql: "SELECT * FROM user_auth WHERE email = ?",
+				sql: "SELECT * FROM user_auth WHERE email = ?;",
 				args: [email],
 			})
 				

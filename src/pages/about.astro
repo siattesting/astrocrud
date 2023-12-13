@@ -3,7 +3,6 @@ import Layout from '../layouts/Layout.astro'
 import { mytasks } from '../lib/tasks';
 const pageTitle = "About Page"
 
-const locals = Astro.locals
 const session = await Astro.locals.auth.validate();
 const userLoggedIn = session?.user
 ---
