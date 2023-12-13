@@ -1,0 +1,18 @@
+---
+import Layout from '../layouts/Layout.astro'
+import { mytasks } from '../lib/tasks';
+const pageTitle = "About Page"
+
+const locals = Astro.locals
+const session = await Astro.locals.auth.validate();
+const userLoggedIn = session?.user
+---
+
+<Layout title={pageTitle}>
+    <h2>About Page</h2>
+    {userLoggedIn && <span>Welcome {userLoggedIn?.email}</span> }
+    {!userLoggedIn && <span>No user logged in</span>}
+    <ul>
+        {mytasks.map(task=> <li>{task.id} - {task.title}</li>)}
+    </ul>
+</Layout>

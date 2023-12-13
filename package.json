@@ -11,7 +11,11 @@
   },
   "dependencies": {
     "@astrojs/check": "^0.3.2",
+    "@astrojs/vercel": "^5.1.0",
+    "@libsql/client": "^0.3.6",
+    "@lucia-auth/adapter-sqlite": "^2.0.1",
     "astro": "^3.0.12",
+    "lucia": "latest",
     "typescript": "^5.3.3"
   }
 }
