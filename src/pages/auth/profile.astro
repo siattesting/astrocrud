@@ -12,7 +12,7 @@ if (!session) return Astro.redirect("/auth/login", 302);
 // }
 
 const myprofile = await getUser(session.user.userId)
-console.log(myprofile)
+// console.log(myprofile)
 
 ---
 
@@ -24,7 +24,9 @@ console.log(myprofile)
 			<input type="submit" value="Sign out" />
 		</form>
 		<hr />
+	{ myprofile &&
 		<div>
 			<p>{myprofile?.user?.points} points</p>
 		</div>
+	}
 </Layout>
