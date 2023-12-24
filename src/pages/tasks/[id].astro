@@ -1,0 +1,23 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import { replicatedDB } from "../../lib/db";
+
+const { id } = Astro.params
+
+ 
+
+const { rows } = await replicatedDB.execute({
+    sql: "SELECT * FROM tasks where id = ?",
+    args: [id!],
+})
+
+const task = rows[0]
+const pageTitle = task.title
+
+---
+
+<Layout title={pageTitle}>
+    <h2>{rows[0].title}</h2>
+    <p>{task.completed ? "Completed" : "Pending"}</p>
+    <small>{task.id}</small>
+</Layout>

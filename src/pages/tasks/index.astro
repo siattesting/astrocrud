@@ -4,14 +4,20 @@ import { replicatedDB } from '../../lib/db.ts'
 
 const pageTitle = "Tasks";
 const { rows } = await replicatedDB.execute("SELECT * FROM tasks;")
+const tasks = rows;
 ---
 <Layout title={pageTitle}>
     <div>
         <h2>{pageTitle}</h2>
-        <ul>
-            {rows.map((task) => (
-                <li>{task.title} - {task.completed ? "Completed" : "Pending"} - {task.id}</li>
+        <div>
+            {tasks.map((task) => (
+                <div>
+                    <a href={`/tasks/${task.id}`}>{task.id}</a> 
+                    <h2>{task.title}</h2>
+                    <p>{task.completed ? "Completed" : "Pending"}</p>
+                    <hr />
+                </div>
             ))}
-        </ul>
+        </div>
     </div>
 </Layout>
