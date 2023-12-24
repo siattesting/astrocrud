@@ -1,10 +1,12 @@
 ---
 import Layout from '../layouts/Layout.astro'
-import { mytasks } from '../lib/tasks';
+import { getTasks, mytasks } from '../lib/tasks';
 const pageTitle = "About Page"
 
 const session = await Astro.locals.auth.validate();
 const userLoggedIn = session?.user
+
+const dbtasks = await getTasks()
 ---
 
 <Layout title={pageTitle}>
@@ -14,4 +16,10 @@ const userLoggedIn = session?.user
     <ul>
         {mytasks.map(task=> <li>{task.id} - {task.title}</li>)}
     </ul>
+    <div>
+        DB tasks
+        <ul>
+            {dbtasks.tasks.map(task=> <li>{task.id} - {task.title} - {task.completed}</li>)}
+        </ul>
+    </div>
 </Layout>

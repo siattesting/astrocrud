@@ -1,3 +1,5 @@
+import { db, replicatedDB } from './db';
+
 export const mytasks = [
   { id: 1, title: 'created basic skeleton' },
   { id: 2, title: 'added lucia with pnpm add lucia' },
@@ -18,3 +20,11 @@ export const mytasks = [
   { id: 9, title: 'Added prisma via npm' },
   { id: 10, title: 'Added vercel adapter with npx astro add vercel' },
 ];
+
+await replicatedDB.sync();
+export const getTasks = async () => {
+  const results = await replicatedDB.execute('SELECT * FROM tasks;');
+  return {
+    tasks: results.rows,
+  };
+};
