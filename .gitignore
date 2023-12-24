@@ -19,3 +19,8 @@ pnpm-debug.log*
 
 # macOS-specific files
 .DS_Store
+
+# local database
+local.db
+local.db-wal
+local.db-shm
