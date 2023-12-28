@@ -1,0 +1,56 @@
+---
+
+import Layout from '../../layouts/Layout.astro'
+import { db, replicatedDB } from '../../lib/db';
+const pageTitle = "Create Transaction";
+// Protect the page for only authenticated users
+const session = await Astro.locals.auth.validate();
+if (!session) return Astro.redirect("/auth/login", 302);
+// Process the form
+const errors = { title: "", email: "", password: "" };
+if (Astro.request.method === "POST") {
+  try {
+    const data = await Astro.request.formData();
+    const title = data.get("title");
+    const completed = data.get("completed");
+    if (typeof title !== "string" || title.length < 1) {
+      errors.title += "Please enter a title for this task. ";
+    }
+    // Do something with the data
+    const hasErrors = Object.values(errors).some(msg => msg)
+    if (!hasErrors) {
+      await replicatedDB.execute({
+        sql: "INSERT INTO tasks (id, title, completed) VALUES (?, ?, ?)",
+        args: [new Date(), title, completed ? 1 : 0]
+      });
+      return Astro.redirect("/tasks");
+    }
+    } catch (error) {
+        if (error instanceof Error) {
+            console.error(error.message);
+        }
+    }
+}
+---
+<Layout title={pageTitle}>
+<div>
+    <form class="box" method="POST">
+        <div class="field">
+          <label class="label">Title</label>
+          <div class="control">
+            <input class="input" name="title" type="text" placeholder="What needs to be done?">
+          </div>
+          {errors.title && <p>{errors.title}</p>}
+        </div>
+      
+        <div class="field">
+          <label class="label">Status</label>
+          <div class="control">
+            <input class="checkbox" name="completed" type="checkbox" >
+          </div>
+        </div>
+      
+        <button class="button is-primary">Save</button>
+      </form>
+</div>
+</Layout>

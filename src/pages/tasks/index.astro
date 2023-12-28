@@ -3,13 +3,16 @@ import Layout from '../../layouts/Layout.astro'
 import { replicatedDB } from '../../lib/db.ts'
 
 const pageTitle = "Tasks";
+await replicatedDB.sync()
 const { rows } = await replicatedDB.execute("SELECT * FROM tasks;")
 const tasks = rows;
+console.log(tasks)
 ---
 <Layout title={pageTitle}>
     <div>
         <h2>{pageTitle}</h2>
         <div>
+            <button><a href="/tasks/create">New task</a></button>
             {tasks.map((task) => (
                 <div>
                     <a href={`/tasks/${task.id}`}>{task.id}</a> 

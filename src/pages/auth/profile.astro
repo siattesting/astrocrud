@@ -3,7 +3,7 @@ import { getSourceMapRange } from 'typescript';
 import Layout from '../../layouts/Layout.astro'
 import { db } from '../../lib/db';
 import { getUser } from '../../lib/UserServices';
-const pageTitle = "Login Page"
+const pageTitle = "Profile Page"
 // Protect the page for only authenticated users
 const session = await Astro.locals.auth.validate();
 if (!session) return Astro.redirect("/auth/login", 302);
@@ -13,6 +13,8 @@ if (!session) return Astro.redirect("/auth/login", 302);
 
 const myprofile = await getUser(session.user.userId)
 // console.log(myprofile)
+
+const pointsBalance = myprofile?.user?.points as Number
 
 ---
 
@@ -26,7 +28,15 @@ const myprofile = await getUser(session.user.userId)
 		<hr />
 	{ myprofile &&
 		<div>
-			<p>{myprofile?.user?.points} points</p>
+			<p>{pointsBalance} points</p>
+			<hr>
+			<div>
+				{pointsBalance > 0 &&
+				<button>Send Points</button>
+			}
+				<button>Receive Points</button>
+			</div>
+			
 		</div>
 	}
 </Layout>

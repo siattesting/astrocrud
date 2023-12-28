@@ -4,8 +4,6 @@ import { replicatedDB } from "../../lib/db";
 
 const { id } = Astro.params
 
- 
-
 const { rows } = await replicatedDB.execute({
     sql: "SELECT * FROM tasks where id = ?",
     args: [id!],
@@ -14,10 +12,59 @@ const { rows } = await replicatedDB.execute({
 const task = rows[0]
 const pageTitle = task.title
 
+// Process the form
+const errors = { title: "", email: "", password: "" };
+if (Astro.request.method === "POST") {
+  try {
+    const data = await Astro.request.formData();
+    const title = data.get("title");
+    const completed = data.get("completed");
+    if (typeof title !== "string" || title.length < 1) {
+      errors.title += "Please enter a title for this task. ";
+    }
+    // Do something with the data
+    const SQL = `
+    UPDATE tasks SET title = ?, completed = ?, WHERE id = ?;`
+    const hasErrors = Object.values(errors).some(msg => msg)
+    if (!hasErrors) {
+      await replicatedDB.execute({
+        sql: "UPDATE tasks SET title = ?, completed = ? WHERE id = ?;",
+        args: [title, completed ? 1 : 0, task.id]
+      });
+      return Astro.redirect("/tasks");
+    }
+    } catch (error) {
+        if (error instanceof Error) {
+            console.error(error.message);
+        }
+    }
+}
+
 ---
 
 <Layout title={pageTitle}>
     <h2>{rows[0].title}</h2>
     <p>{task.completed ? "Completed" : "Pending"}</p>
     <small>{task.id}</small>
+
+    <div>
+        <form class="box" method="POST">
+            <div class="field">
+              <label class="label">Title</label>
+              <div class="control">
+                <input class="input" name="title" value={task.title} type="text" placeholder="What needs to be done?">
+              </div>
+              {errors.title && <p>{errors.title}</p>}
+            </div>
+          
+            <div class="field">
+              <label class="label">Status</label>
+              <div class="control">
+                <input class="checkbox" name="completed" type="checkbox" value={task.completed} >
+              </div>
+            </div>
+          
+            <button class="button is-primary">Save</button>
+          </form>
+    </div>
 </Layout>
