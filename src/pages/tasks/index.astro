@@ -1,4 +1,5 @@
 ---
+import TasksBar from '../../components/TasksBar.astro';
 import Layout from '../../layouts/Layout.astro'
 import { replicatedDB } from '../../lib/db.ts'
 
@@ -6,12 +7,15 @@ const pageTitle = "Tasks";
 await replicatedDB.sync()
 const { rows } = await replicatedDB.execute("SELECT * FROM tasks;")
 const tasks = rows;
-console.log(tasks)
+const completedTasks = rows.filter(t => t.completed)
+const pendingTasks = rows.filter(t => !t.completed)
+// console.log(tasks)
 ---
 <Layout title={pageTitle}>
     <div>
         <h2>{pageTitle}</h2>
         <div>
+            <TasksBar count={rows.length} pending={pendingTasks.length} completed={completedTasks.length} />
             <button><a href="/tasks/create">New task</a></button>
             {tasks.map((task) => (
                 <div>
