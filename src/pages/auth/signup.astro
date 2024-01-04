@@ -1,9 +1,7 @@
 ---
 import Layout from '../../layouts/Layout.astro'
-import { sendEmailVerificationLink } from '../../lib/email';
 const pageTitle = "Signup Page"
 import { auth } from "../../lib/lucia";
-import { generateEmailVerificationToken } from '../../lib/token';
 import { validateEmail } from '../../lib/utils';
 
 const errors = { username: "", email: "", password: "", passwordConfirm: ""}
@@ -52,9 +50,7 @@ if (Astro.request.method === "POST") {
 				attributes: {}
 			});
 			Astro.locals.auth.setSession(session); // set session cookie
-			// Send verification token for email validation
-			const token = await generateEmailVerificationToken(user.userId)
-			await sendEmailVerificationLink(token);
+		
 			return Astro.redirect("/auth/profile", 302); // redirect to profile page
 		} catch (e) {
 			// this part depends on the database you're using

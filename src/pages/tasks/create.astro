@@ -11,7 +11,7 @@ const errors = { title: "", email: "", password: "" };
 if (Astro.request.method === "POST") {
   try {
     const data = await Astro.request.formData();
-    const title = data.get("title");
+    const title = data.get("title") as string;
     const completed = data.get("completed");
     if (typeof title !== "string" || title.length < 1) {
       errors.title += "Please enter a title for this task. ";

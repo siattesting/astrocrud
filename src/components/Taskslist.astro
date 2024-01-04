@@ -1,0 +1,15 @@
+---
+const { tasks } = Astro.props;
+const { view } = Astro.props
+---
+
+<div data-view={view}>
+    {tasks?.map((task: any) => (
+        <div>
+            <a href={`/tasks/${task.id}`}>{task.id}</a> 
+            <h2>{task.title}</h2>
+            <p>{task.completed ? "Completed" : "Pending"}</p>
+            <hr />
+        </div>
+    ))}
+</div>

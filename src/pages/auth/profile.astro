@@ -31,7 +31,7 @@ const pointsBalance = myprofile?.user?.points as Number
 			<p>{pointsBalance} points</p>
 			<hr>
 			<div>
-				{pointsBalance > 0 &&
+				{pointsBalance != 0 &&
 				<button>Send Points</button>
 			}
 				<button>Receive Points</button>

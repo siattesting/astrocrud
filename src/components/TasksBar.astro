@@ -20,7 +20,7 @@ const { count, pending, completed } = Astro.props;
       <div class="level-item">
         <div class="field has-addons">
           <p class="control">
-            <input class="input" type="text" placeholder="Find a task">
+            <input class="input" type="text" placeholder="Find a task" >
           </p>
           <p class="control">
             <button class="button">
@@ -33,8 +33,8 @@ const { count, pending, completed } = Astro.props;
   
     <!-- Right side -->
     <div class="level-right">
-      <p class="level-item"><strong>All</strong></p>
-      <p class="level-item"><a>{pending } Pending tasks</a></p>
+      <p class="level-item"><strong>All </strong></p>
+      <p class="level-item"><a href="/tasks/pendingtasks">{pending } Pending tasks</a></p>
       <p class="level-item"><a>{completed } Completed tasks </a></p>
       <p class="level-item"><a>Deleted</a></p>
       <p class="level-item"><a href="/tasks/new" class="button is-success">New</a></p>

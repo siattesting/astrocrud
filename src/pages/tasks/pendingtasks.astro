@@ -1,0 +1,30 @@
+---
+import TasksBar from '../../components/TasksBar.astro';
+import Taskslist from '../../components/Taskslist.astro';
+import Layout from '../../layouts/Layout.astro'
+import { fetchCompletedTasks, fetchPendingTasks, fetchTasks } from '../../lib/data';
+import { replicatedDB } from '../../lib/db.ts'
+
+const pageTitle = "Pending Tasks";
+await replicatedDB.sync()
+
+const alltasks  = await fetchTasks()
+
+const completedTasks = await fetchCompletedTasks();
+
+const pendingTasks = await fetchPendingTasks();
+
+---
+<Layout title={pageTitle}>
+    <div>
+        <h2>{pageTitle}</h2>
+        
+            <TasksBar count={alltasks.length} pending={pendingTasks.length} completed={completedTasks.length}/>
+            <button><a href="/tasks/newtask">New task</a></button>
+            
+        <Taskslist tasks={pendingTasks} />       
+        
+    </div>
+</Layout>
+
+ 

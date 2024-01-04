@@ -1,4 +1,5 @@
 ---
+import Task from "../../components/Task.astro";
 import Layout from "../../layouts/Layout.astro";
 import { replicatedDB } from "../../lib/db";
 
@@ -10,21 +11,19 @@ const { rows } = await replicatedDB.execute({
 })
 
 const task = rows[0]
-const pageTitle = task.title
+const pageTitle = task.title as string;
 
 // Process the form
 const errors = { title: "", email: "", password: "" };
 if (Astro.request.method === "POST") {
   try {
     const data = await Astro.request.formData();
-    const title = data.get("title");
+    const title = data.get("title") as string;
     const completed = data.get("completed");
     if (typeof title !== "string" || title.length < 1) {
       errors.title += "Please enter a title for this task. ";
     }
     // Do something with the data
-    const SQL = `
-    UPDATE tasks SET title = ?, completed = ?, WHERE id = ?;`
     const hasErrors = Object.values(errors).some(msg => msg)
     if (!hasErrors) {
       await replicatedDB.execute({
@@ -43,9 +42,11 @@ if (Astro.request.method === "POST") {
 ---
 
 <Layout title={pageTitle}>
-    <h2>{rows[0].title}</h2>
+    <!-- <h2>{rows[0].title}</h2>
     <p>{task.completed ? "Completed" : "Pending"}</p>
-    <small>{task.id}</small>
+    <small>{task.id}</small> -->
+
+    <Task task={task} />
 
     <div>
         <form class="box" method="POST">

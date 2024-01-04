@@ -10,11 +10,11 @@
     "astro": "astro"
   },
   "dependencies": {
-    "@astrojs/check": "^0.3.2",
-    "@astrojs/vercel": "^5.1.0",
+    "@astrojs/check": "^0.3.4",
+    "@astrojs/vercel": "^6.1.2",
     "@libsql/client": "^0.3.6",
     "@lucia-auth/adapter-sqlite": "^2.0.1",
-    "astro": "^3.0.12",
+    "astro": "^4.0.9",
     "lucia": "latest",
     "typescript": "^5.3.3"
   }

@@ -1,30 +1,35 @@
 ---
 import TasksBar from '../../components/TasksBar.astro';
+import Taskslist from '../../components/Taskslist.astro';
 import Layout from '../../layouts/Layout.astro'
+import { fetchCompletedTasks, fetchPendingTasks, fetchTasks } from '../../lib/data';
 import { replicatedDB } from '../../lib/db.ts'
 
 const pageTitle = "Tasks";
 await replicatedDB.sync()
-const { rows } = await replicatedDB.execute("SELECT * FROM tasks;")
-const tasks = rows;
-const completedTasks = rows.filter(t => t.completed)
-const pendingTasks = rows.filter(t => !t.completed)
-// console.log(tasks)
+
+const alltasks  = await fetchTasks()
+
+const completedTasks = await fetchCompletedTasks();
+
+const pendingTasks = await fetchPendingTasks();
+let view, tasks;
+
 ---
 <Layout title={pageTitle}>
     <div>
         <h2>{pageTitle}</h2>
-        <div>
-            <TasksBar count={rows.length} pending={pendingTasks.length} completed={completedTasks.length} />
-            <button><a href="/tasks/create">New task</a></button>
-            {tasks.map((task) => (
-                <div>
-                    <a href={`/tasks/${task.id}`}>{task.id}</a> 
-                    <h2>{task.title}</h2>
-                    <p>{task.completed ? "Completed" : "Pending"}</p>
-                    <hr />
-                </div>
-            ))}
-        </div>
+        
+            <TasksBar count={alltasks.length} pending={pendingTasks.length} completed={completedTasks.length}/>
+            <button><a href="/tasks/newtask">New task</a></button>
+            
+        <!-- { view === 'ALL' && <Taskslist tasks={alltasks} client:load />}
+        { view === 'PENDING' && <Taskslist tasks={pendingTasks} client:load />}
+        { view === 'COMPLETED' && <Taskslist tasks={completedTasks} client:load />} -->
+        <Taskslist tasks={alltasks} view={view} />
+       
+        
     </div>
 </Layout>
+
+ 
